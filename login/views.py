@@ -63,7 +63,9 @@ def user_confirm(request):
         return render(request, 'login/confirm.html', locals())
 
 def index(request):
-    pass
+    if not request.session.get('is_login', None):
+        # 如果本来就未登录，也就没有登出一说
+        return redirect("/login/")
     return render(request, 'login/index.html')
 
 
@@ -144,11 +146,11 @@ def register(request):
 def logout(request):
     if not request.session.get('is_login', None):
         # 如果本来就未登录，也就没有登出一说
-        return redirect("/index/")
+        return redirect("/login/")
     request.session.flush()
     # 或者使用下面的方法
     # del request.session['is_login']
     # del request.session['user_id']
     # del request.session['user_name']
-    return redirect("/index/")
+    return redirect("/login/")
 
